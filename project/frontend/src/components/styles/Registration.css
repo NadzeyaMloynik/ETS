@@ -1,0 +1,75 @@
+.auth-container {
+  background-color: rgb(255, 255, 255);
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.auth-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.auth-container .form-group input[type="text"],
+.auth-container .form-group input[type="email"],
+.auth-container .form-group input[type="password"] {
+  width: 100%;
+  margin-top: -10px;
+  padding: 10px;
+  border: none;
+  border-bottom: #a4a4a4 solid 1px;
+}
+
+.auth-container .form-group input[type="text"]:focus,
+.auth-container input[type="email"]:focus,
+.auth-container input[type="password"]:focus {
+  background-color: #dddddd;
+  border-radius: 3px;
+  outline: none;
+}
+
+.auth-container form {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+
+.auth-container button[type="submit"] {
+  margin-top: 20px;
+  color: #fff;
+  display: block;
+  padding: 10px;
+  background-color: rgb(78, 78, 78);
+  border-radius: 0px;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 50%;
+  align-self: center;
+}
+
+.auth-container button[type="submit"]:hover {
+  background-color: rgb(58, 58, 58);
+  color: #a4a4a4;
+}
+
+.role {
+  display: flex;
+  justify-content: space-between;
+}
+.role input {
+  text-align: center;
+}
+
+.auth-container .error-message {
+  height: 20px;
+  font-size: 13px;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  color: rgb(194, 37, 37);
+  text-align: center;
+}

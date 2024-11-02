@@ -1,0 +1,82 @@
+.auth-container-login {
+  max-width: 500px;
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  margin: 20px auto;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.main-login-container {
+  min-height: 577px;
+}
+
+.auth-container-login h2 {
+  margin-top: 0;
+}
+
+.form-group {
+  margin: 15px;
+}
+
+.auth-container-login a {
+  color: rgb(156, 156, 156);
+  font-size: 12px;
+  margin-top: -20px;
+  text-decoration: none;
+  align-self: flex-end;
+}
+
+.auth-container-login a:hover {
+  color: rgb(88, 88, 88);
+  text-decoration: underline;
+}
+
+.auth-container-login .error-message {
+  height: 20px;
+  font-size: 13px;
+  margin-top: 6px;
+  color: rgb(194, 37, 37);
+  text-align: center;
+}
+
+.auth-container-login input[type="email"],
+.auth-container-login input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: #a4a4a4 solid 1px;
+}
+
+.auth-container-login input[type="email"]:focus,
+.auth-container-login input[type="password"]:focus {
+  background-color: #dddddd;
+  border-radius: 3px;
+  outline: none;
+}
+
+.auth-container-login button {
+  margin-top: 20px;
+  display: block;
+  color: #fff;
+  padding: 10px;
+  background-color: rgb(78, 78, 78);
+  border-radius: 0px;
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 50%;
+  align-self: center;
+}
+
+.auth-container-login form {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-container-login button:hover {
+  background-color: rgb(58, 58, 58);
+  color: #a4a4a4;
+}
