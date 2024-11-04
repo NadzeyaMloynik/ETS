@@ -6,15 +6,13 @@ import com.phegondev.usersmanagementsystem.service.TestService;
 import com.phegondev.usersmanagementsystem.util.PageHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.List;
-
-import static com.phegondev.usersmanagementsystem.util.PageHelper.toPage;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +31,13 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void updateTest(Long id, String title, String description) {
-        Test test = testRepository.getReferenceById(id);
-        test.setName(title);
-        test.setDescription(description);
-        testRepository.save(test);
+        this.testRepository.findById(id)
+                .ifPresentOrElse(t -> {
+                    t.setName(title);
+                    t.setDescription(description);
+                }, () -> {
+                    throw new NoSuchElementException();
+                });
     }
 
     @Override

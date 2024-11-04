@@ -1,9 +1,8 @@
 package com.phegondev.usersmanagementsystem.controller;
 
-import com.phegondev.usersmanagementsystem.dto.test.NewTestPayload;
+import com.phegondev.usersmanagementsystem.dto.NewTestPayload;
 import com.phegondev.usersmanagementsystem.entity.Test;
 import com.phegondev.usersmanagementsystem.service.TestService;
-import com.phegondev.usersmanagementsystem.service.impl.TestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
