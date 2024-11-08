@@ -18,8 +18,6 @@ public class Notification {
     private Long id;
     private String title;
     private String body;
-    private String authorFirstName;
-    private String authorLastName;
     private Boolean isRead;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")

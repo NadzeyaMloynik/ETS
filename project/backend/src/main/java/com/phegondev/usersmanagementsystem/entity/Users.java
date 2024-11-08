@@ -3,6 +3,7 @@ package com.phegondev.usersmanagementsystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.core.SpringVersion;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +20,7 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String email;
-    private String name;
     private String password;
-    private String city;
     private String role;
 
     @Override

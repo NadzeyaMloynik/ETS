@@ -90,9 +90,7 @@ public class UsersManagementService {
                 return resp;
             }
             ourUser.setEmail(registrationRequest.getEmail());
-            ourUser.setCity(registrationRequest.getCity());
             ourUser.setRole(registrationRequest.getRole());
-            ourUser.setName(registrationRequest.getName());
             if(!registrationRequest.getPassword().equals(registrationRequest.getRepPassword())) {
                 resp.setMessage("Password don't match");
                 resp.setStatusCode(400);
@@ -227,8 +225,6 @@ public class UsersManagementService {
             if (userOptional.isPresent()) {
                 Users existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
-                existingUser.setName(updatedUser.getName());
-                existingUser.setCity(updatedUser.getCity());
                 existingUser.setRole(updatedUser.getRole());
 
                 if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
