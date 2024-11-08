@@ -1,13 +1,8 @@
 package com.phegondev.usersmanagementsystem.util;
 
-import com.phegondev.usersmanagementsystem.dto.AnswerDto;
-import com.phegondev.usersmanagementsystem.dto.NotificationDto;
-import com.phegondev.usersmanagementsystem.dto.QuestionDto;
-import com.phegondev.usersmanagementsystem.dto.TestDto;
-import com.phegondev.usersmanagementsystem.entity.Answer;
-import com.phegondev.usersmanagementsystem.entity.Notification;
-import com.phegondev.usersmanagementsystem.entity.Question;
-import com.phegondev.usersmanagementsystem.entity.Test;
+import com.phegondev.usersmanagementsystem.dto.*;
+import com.phegondev.usersmanagementsystem.entity.*;
+import jakarta.validation.constraints.Max;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -96,5 +91,63 @@ public class DtoUtil {
             }
         }
         return testDtos;
+    }
+
+    public static FeedbackDto toDtoFeedback(Feedback feedback) {
+        FeedbackDto feedbackDto = new FeedbackDto();
+        feedbackDto.setId(feedback.getId());
+        feedbackDto.setMessage(feedback.getMessage());
+        return feedbackDto;
+    }
+
+    public static AssigmentDetailDto toDtoAssignmentDetail(AssignmentDetail assignmentDetail) {
+        AssigmentDetailDto assigmentDetailDto = new AssigmentDetailDto();
+        assigmentDetailDto.setId(assignmentDetail.getId());
+        assigmentDetailDto.setIsPassed(assignmentDetail.getIsPassed());
+        assigmentDetailDto.setFeedback(toDtoFeedback(assignmentDetail.getFeedback()));
+        assigmentDetailDto.setTest(toDtoTest(assignmentDetail.getTest()));
+        assigmentDetailDto.setResult(assignmentDetail.getResult());
+        return assigmentDetailDto;
+    }
+
+    public static List<AssigmentDetailDto> toDtoAssignmentDetailList(List<AssignmentDetail> assignmentDetails) {
+        List<AssigmentDetailDto> assigmentDetailDtos = new ArrayList<>();
+        if(assignmentDetails != null) {
+            for(AssignmentDetail assignmentDetail : assignmentDetails) {
+                assigmentDetailDtos.add(toDtoAssignmentDetail(assignmentDetail));
+            }
+        }
+        return assigmentDetailDtos;
+    }
+
+    public static UserDto toDtoUser(Users user) {
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setCity(user.getCity());
+        userDto.setPosition(user.getPosition());
+        userDto.setLastname(user.getLastname());
+        return userDto;
+    }
+
+    public static AssignmentDto toDtoAssignment(Assignment assignment) {
+        AssignmentDto assignmentDto = new AssignmentDto();
+        assignmentDto.setId(assignment.getId());
+        assignmentDto.setFromUser(toDtoUser(assignment.getFromUser()));
+        assignmentDto.setToUser(toDtoUser(assignment.getToUser()));
+        assignmentDto.setCloseDate(assignment.getCloseDate());
+        assignmentDto.setStartDate(assignment.getStartDate());
+        assignmentDto.setAssigmentDetails(toDtoAssignmentDetailList(assignment.getAssignmentDetailList()));
+        return assignmentDto;
+    }
+
+    public static List<AssignmentDto> toDtoAssignmentList(List<Assignment> assignments) {
+        List<AssignmentDto> assignmentDtos = new ArrayList<>();
+        if(assignments != null) {
+            for(Assignment assignment : assignments) {
+                assignmentDtos.add(toDtoAssignment(assignment));
+            }
+        }
+        return assignmentDtos;
     }
 }

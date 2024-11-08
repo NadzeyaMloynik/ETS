@@ -19,19 +19,16 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "assignment_id")
     private Long id;
-    private String name;
     private Date startDate;
     private Date closeDate;
-    private boolean isPassed;
-    private Float result;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private Users user;
+    @JoinColumn(name = "to_user_id", referencedColumnName = "id")
+    private Users toUser;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "from_user_id", referencedColumnName = "id")
+    private Users fromUser;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "assignment")
     private List<AssignmentDetail> assignmentDetailList;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "feedback_id", referencedColumnName = "feedback_id")
-    private Feedback feedback;
 }

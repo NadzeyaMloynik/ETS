@@ -16,11 +16,8 @@ public class Feedback {
     @Column(name = "feedback_id")
     private Long id;
     private String message;
-    private String authorFirstName;
-    private String authorLastName;
-    private String authorEmail;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "assignment_id", referencedColumnName = "assignment_id")
-    private Assignment assignment;
+    @JoinColumn(name = "assignment_detail_id", referencedColumnName = "assignment_detail_id")
+    private AssignmentDetail assignmentDetail;
 }

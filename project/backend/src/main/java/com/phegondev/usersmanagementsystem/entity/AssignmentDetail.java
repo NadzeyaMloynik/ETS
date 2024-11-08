@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +17,9 @@ public class AssignmentDetail {
     @Column(name = "assignment_detail_id")
     private Long id;
 
+    private Float result;
+    private Boolean isPassed;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assignment_id", referencedColumnName = "assignment_id")
     private Assignment assignment;
@@ -24,4 +28,7 @@ public class AssignmentDetail {
     @JoinColumn(name = "test_id", referencedColumnName = "test_id")
     private Test test;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "feedback_id", referencedColumnName = "feedback_id")
+    private Feedback feedback;
 }

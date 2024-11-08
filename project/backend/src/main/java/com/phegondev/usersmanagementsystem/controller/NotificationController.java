@@ -33,7 +33,6 @@ public class NotificationController {
         } else {
             return ResponseEntity.ok(this.notificationService.create(userId, payload));
         }
-
     }
 
     @Transactional
