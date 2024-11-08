@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssigmentDetailDto {
+public class AssignmentDetailDto {
     private Long id;
     private Float result;
     private Boolean isPassed;

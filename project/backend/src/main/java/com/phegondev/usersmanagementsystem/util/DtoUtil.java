@@ -2,7 +2,6 @@ package com.phegondev.usersmanagementsystem.util;
 
 import com.phegondev.usersmanagementsystem.dto.*;
 import com.phegondev.usersmanagementsystem.entity.*;
-import jakarta.validation.constraints.Max;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -38,6 +37,7 @@ public class DtoUtil {
         answerDto.setQuestionId(answer.getQuestion().getId());
         answerDto.setIsCorrect(answer.getIsCorrect());
         answerDto.setImage(answer.getImage());
+        answerDto.setPoints(answer.getPoints());
         return answerDto;
     }
 
@@ -100,8 +100,8 @@ public class DtoUtil {
         return feedbackDto;
     }
 
-    public static AssigmentDetailDto toDtoAssignmentDetail(AssignmentDetail assignmentDetail) {
-        AssigmentDetailDto assigmentDetailDto = new AssigmentDetailDto();
+    public static AssignmentDetailDto toDtoAssignmentDetail(AssignmentDetail assignmentDetail) {
+        AssignmentDetailDto assigmentDetailDto = new AssignmentDetailDto();
         assigmentDetailDto.setId(assignmentDetail.getId());
         assigmentDetailDto.setIsPassed(assignmentDetail.getIsPassed());
         assigmentDetailDto.setFeedback(toDtoFeedback(assignmentDetail.getFeedback()));
@@ -110,8 +110,8 @@ public class DtoUtil {
         return assigmentDetailDto;
     }
 
-    public static List<AssigmentDetailDto> toDtoAssignmentDetailList(List<AssignmentDetail> assignmentDetails) {
-        List<AssigmentDetailDto> assigmentDetailDtos = new ArrayList<>();
+    public static List<AssignmentDetailDto> toDtoAssignmentDetailList(List<AssignmentDetail> assignmentDetails) {
+        List<AssignmentDetailDto> assigmentDetailDtos = new ArrayList<>();
         if(assignmentDetails != null) {
             for(AssignmentDetail assignmentDetail : assignmentDetails) {
                 assigmentDetailDtos.add(toDtoAssignmentDetail(assignmentDetail));

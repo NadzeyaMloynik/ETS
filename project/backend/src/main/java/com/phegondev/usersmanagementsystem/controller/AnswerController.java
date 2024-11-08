@@ -37,7 +37,7 @@ public class AnswerController {
             }
         } else {
             try{
-                return ResponseEntity.ok(this.answerService.create(questionId, payload.text(), payload.isCorrect()));
+                return ResponseEntity.ok(this.answerService.create(questionId, payload.text(), payload.isCorrect(), payload.points()));
             } catch (NoSuchElementException e) {
                 return ResponseEntity.notFound().build();
             }catch (Exception e) {
@@ -57,7 +57,7 @@ public class AnswerController {
                 throw new BindException(bindingResult);
             }
         } else {
-            this.answerService.update(id, payload.text(), payload.isCorrect());
+            this.answerService.update(id, payload.text(), payload.isCorrect(), payload.points());
             return ResponseEntity.noContent().build();
         }
     }

@@ -12,5 +12,6 @@ public class AnswerDto {
     private String text;
     private Boolean isCorrect;
     private Long questionId;
+    private Integer points;
     private byte[] image;
 }

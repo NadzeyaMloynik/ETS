@@ -16,6 +16,7 @@ public class Answer {
     @Column(name = "answer_id")
     private Long id;
     private String text;
+    private Integer points;
     private Boolean isCorrect;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "question_id", referencedColumnName = "question_id")

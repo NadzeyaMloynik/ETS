@@ -8,9 +8,9 @@ import java.io.IOException;
 import java.util.List;
 
 public interface AnswerService {
-    AnswerDto create(Long questionId, String text, Boolean isCorrect);
+    AnswerDto create(Long questionId, String text, Boolean isCorrect, Integer points);
 
-    void update(Long id, String text, Boolean isCorrect);
+    void update(Long id, String text, Boolean isCorrect,Integer points);
 
     void delete(Long id);
 

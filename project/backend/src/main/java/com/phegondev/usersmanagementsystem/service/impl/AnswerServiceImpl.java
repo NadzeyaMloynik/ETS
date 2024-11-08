@@ -26,10 +26,10 @@ public class AnswerServiceImpl implements AnswerService {
     private final QuestionRepository questionRepository;
 
     @Override
-    public AnswerDto create(Long questionId, String text, Boolean isCorrect) {
+    public AnswerDto create(Long questionId, String text, Boolean isCorrect, Integer points) {
         Optional<Question> question = this.questionRepository.findById(questionId);
         if (question.isPresent()) {
-            Answer answer = answerRepository.save(new Answer(null, text, isCorrect,question.get(), null));
+            Answer answer = answerRepository.save(new Answer(null, text, points, isCorrect,question.get(), null));
             return DtoUtil.toDtoAnswer(answer);
         }
         else {
@@ -38,10 +38,11 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void update(Long id, String text, Boolean isCorrect) {
+    public void update(Long id, String text, Boolean isCorrect, Integer points) {
         this.answerRepository.findById(id)
                 .ifPresentOrElse(a -> {
                     a.setText(text);
+                    a.setPoints(points);
                     a.setIsCorrect(isCorrect);
                 }, () -> {
                     throw new NoSuchElementException();
