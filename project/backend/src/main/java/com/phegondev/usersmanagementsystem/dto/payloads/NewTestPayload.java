@@ -1,4 +1,4 @@
-package com.phegondev.usersmanagementsystem.dto;
+package com.phegondev.usersmanagementsystem.dto.payloads;
 
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;

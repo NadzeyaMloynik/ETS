@@ -3,7 +3,7 @@ package com.phegondev.usersmanagementsystem.service.impl;
 import com.phegondev.usersmanagementsystem.entity.Test;
 import com.phegondev.usersmanagementsystem.repository.TestRepository;
 import com.phegondev.usersmanagementsystem.service.TestService;
-import com.phegondev.usersmanagementsystem.util.PageHelper;
+import com.phegondev.usersmanagementsystem.util.PageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,7 +49,7 @@ public class TestServiceImpl implements TestService {
     public Page<Test> searchTests(int pageNo, String keyword) {
         List<Test> tests = testRepository.searchByNameOrDescription(keyword);
         Pageable pageable = PageRequest.of(pageNo, 5);
-        return PageHelper.toPage(tests, pageable);
+        return PageUtil.toPage(tests, pageable);
     }
 
 }

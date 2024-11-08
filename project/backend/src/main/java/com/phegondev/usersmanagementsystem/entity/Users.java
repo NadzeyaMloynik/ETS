@@ -55,6 +55,10 @@ public class Users implements UserDetails {
     }
 
     @Lob
-    @Column(name = "photo", columnDefinition = "BLOB")
+    @Column(name = "photo", columnDefinition = "TEXT")
     private byte[] photo;
+
+    @Lob
+    @Column(name = "imagedata", columnDefinition = "MEDIUMBLOB")
+    private byte[] imageData;
 }

@@ -1,6 +1,6 @@
 package com.phegondev.usersmanagementsystem.controller;
 
-import com.phegondev.usersmanagementsystem.dto.NewQuestionPayload;
+import com.phegondev.usersmanagementsystem.dto.payloads.NewQuestionPayload;
 import com.phegondev.usersmanagementsystem.dto.QuestionDto;
 import com.phegondev.usersmanagementsystem.service.QuestionService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("/adminuser/question/{id}")
+    @GetMapping("/hruser/question/{id}")
     public ResponseEntity<?> getQuestion(@PathVariable Long id) {
         try {
             QuestionDto question = questionService.findById(id);
@@ -30,12 +30,12 @@ public class QuestionController {
         }
     }
 
-    @GetMapping("/adminuser/question/{testId}/pages")
+    @GetMapping("/hruser/question/{testId}/pages")
     public ResponseEntity<Page<QuestionDto>> getPaginationQuestions(@PathVariable Long testId,@RequestParam(required = false, name = "pageNo") int pageNo) {
         return ResponseEntity.ok(questionService.paginationQuestions(testId, pageNo));
     }
 
-    @GetMapping("/adminuser/question/{testId}")
+    @GetMapping("/hruser/question/{testId}")
     public ResponseEntity<?> getAllTestQuestions(@PathVariable Long testId) {
         return ResponseEntity.ok(questionService.findAll(testId));
     }

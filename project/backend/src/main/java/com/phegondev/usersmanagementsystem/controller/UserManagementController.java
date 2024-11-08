@@ -6,6 +6,7 @@ import com.phegondev.usersmanagementsystem.service.UsersManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,11 +15,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UserManagementController {
+
     @Autowired
     private UsersManagementService usersManagementService;
 
+    @GetMapping("/adminuser/{userId}/photo")
+    public ResponseEntity<?> uploadUserPhoto(@PathVariable Integer userId) {
+        byte[] image = usersManagementService.getImage(userId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(image);
+    }
+
     @PutMapping("/adminuser/{userId}/upload-photo")
-    public ReqRes uploadUserPhoto(@PathVariable Integer userId, @RequestBody MultipartFile photoFile) {
+    public ReqRes uploadUserPhoto(@PathVariable Integer userId, @RequestParam("photoFile") MultipartFile photoFile) {
         return usersManagementService.uploadPhoto(userId, photoFile);
     }
 

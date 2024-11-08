@@ -3,8 +3,8 @@ package com.phegondev.usersmanagementsystem.service;
 import com.phegondev.usersmanagementsystem.dto.ReqRes;
 import com.phegondev.usersmanagementsystem.entity.Users;
 import com.phegondev.usersmanagementsystem.repository.UsersRepo;
-import com.phegondev.usersmanagementsystem.util.PageHelper;
-import org.apache.catalina.User;
+import com.phegondev.usersmanagementsystem.util.ImageUtil;
+import com.phegondev.usersmanagementsystem.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,25 +31,40 @@ public class UsersManagementService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public byte[] getImage(Integer userId){
+        try{
+            Optional<Users> userOptional = usersRepo.findById(userId);
+            if (userOptional.isPresent()) {
+                Users user = userOptional.get();
+                return ImageUtil.decompressImage(user.getImageData());
+            }
+            else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public ReqRes uploadPhoto(Integer userId, MultipartFile photoFile) {
         ReqRes reqRes = new ReqRes();
         try {
             Optional<Users> userOptional = usersRepo.findById(userId);
-            System.out.println(userId);
             if (userOptional.isPresent()) {
                 Users user = userOptional.get();
 
-                if (photoFile != null && !photoFile.isEmpty()) {
-                    user.setPhoto(photoFile.getBytes());
-                    Users updatedUser = usersRepo.save(user);
-
-                    reqRes.setOurUsers(updatedUser);
+                if (photoFile == null) {
+                    reqRes.setStatusCode(400);
+                    reqRes.setMessage("Photo file is empty");
+                    user.setPhoto(null);
+                }
+                else {
+                    user.setImageData(ImageUtil.compressImage(photoFile.getBytes()));
+                    reqRes.setOurUsers(user);
                     reqRes.setStatusCode(200);
                     reqRes.setMessage("Photo uploaded successfully");
-                } else {
-                    reqRes.setStatusCode(400);
-                    reqRes.setMessage("Invalid photo file");
                 }
+                usersRepo.save(user);
             } else {
                 reqRes.setStatusCode(404);
                 reqRes.setMessage("User not found");
@@ -260,6 +275,6 @@ public class UsersManagementService {
     public Page<Users> searchUsers(int pageNo, String keyword) {
         List<Users> users = usersRepo.findByEmailContaining(keyword);
         Pageable pageable = PageRequest.of(pageNo, 5);
-        return PageHelper.toPage(users, pageable);
+        return PageUtil.toPage(users, pageable);
     }
 }

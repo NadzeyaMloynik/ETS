@@ -59,6 +59,22 @@ class UserService{
         }
     }
 
+    static async getUserImage(userId, token) {
+        try {
+            const response = await axios.get(`${UserService.BASE_URL}/adminuser/${userId}/photo`, {
+                headers: { Authorization: `Bearer ${token}` },
+                responseType: 'arraybuffer' 
+            }); 
+
+            const imageUrl = URL.createObjectURL(new Blob([response.data], { type: 'image/png' }));
+    
+            return imageUrl;
+        } catch (err) {
+            throw err;
+        }
+    }
+    
+
     static async deleteUser(userId, token){
         try{
             const response = await axios.delete(`${UserService.BASE_URL}/admin/delete/${userId}`, 
@@ -87,11 +103,16 @@ class UserService{
         try {
             const formData = new FormData();
             formData.append("photoFile", photoFile);
+    
+            console.log(token)
 
-            const response = await axios.put(`${UserService.BASE_URL}/adminuser/${userId}/upload-photo`, photoFile, {
-                headers: {Authorization: `Bearer ${token}`,
+            const response = await axios.put(`${UserService.BASE_URL}/adminuser/${userId}/upload-photo`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
+            
             return response.data;
         } catch (err) {
             throw err;

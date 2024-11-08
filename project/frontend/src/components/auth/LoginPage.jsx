@@ -4,7 +4,6 @@ import UserService from "../service/UserService";
 import "../styles/Login.css";
 import {Button, ButtonGroup, Container, Nav, Navbar,  NavDropdown, Image} from "react-bootstrap";
 import { ADMIN_ROUTE } from "../../utils/consts";
-// import loginImg from "../assets/logRegBackground.webp"
 import { useAuth } from '../common/AuthContext'; 
 
 function LoginPage() {
@@ -12,7 +11,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // Используйте метод login из контекста
+  const { login } = useAuth(); 
   
   const handleSubmit = async (e) => {
     e.preventDefault();
