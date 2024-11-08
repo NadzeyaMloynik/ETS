@@ -56,7 +56,6 @@ public class UsersManagementService {
                 if (photoFile == null) {
                     reqRes.setStatusCode(400);
                     reqRes.setMessage("Photo file is empty");
-                    user.setPhoto(null);
                 }
                 else {
                     user.setImageData(ImageUtil.compressImage(photoFile.getBytes()));
@@ -91,6 +90,10 @@ public class UsersManagementService {
             }
             ourUser.setEmail(registrationRequest.getEmail());
             ourUser.setRole(registrationRequest.getRole());
+            ourUser.setName(registrationRequest.getName());
+            ourUser.setCity(registrationRequest.getCity());
+            ourUser.setLastname(registrationRequest.getLastname());
+            ourUser.setPosition(registrationRequest.getPosition());
             if(!registrationRequest.getPassword().equals(registrationRequest.getRepPassword())) {
                 resp.setMessage("Password don't match");
                 resp.setStatusCode(400);
@@ -226,6 +229,10 @@ public class UsersManagementService {
                 Users existingUser = userOptional.get();
                 existingUser.setEmail(updatedUser.getEmail());
                 existingUser.setRole(updatedUser.getRole());
+                existingUser.setPosition(updatedUser.getPosition());
+                existingUser.setName(updatedUser.getName());
+                existingUser.setCity(updatedUser.getCity());
+                existingUser.setLastname(updatedUser.getLastname());
 
                 if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
                     existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));

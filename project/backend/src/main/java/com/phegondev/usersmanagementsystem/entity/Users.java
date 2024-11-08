@@ -19,7 +19,11 @@ public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
+    private String lastname;
+    private String position;
     private String email;
+    private String city;
     private String password;
     private String role;
 
@@ -52,10 +56,6 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    @Lob
-    @Column(name = "photo", columnDefinition = "TEXT")
-    private byte[] photo;
 
     @Lob
     @Column(name = "imagedata", columnDefinition = "MEDIUMBLOB")

@@ -18,6 +18,10 @@ public class ReqRes {
     private String token;
     private String refreshToken;
     private String expirationTime;
+    private String name;
+    private String city;
+    private String lastname;
+    private String position;
     private String role;
     private String email;
     private String password;
