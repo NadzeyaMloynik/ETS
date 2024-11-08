@@ -1,6 +1,6 @@
 package com.phegondev.usersmanagementsystem.controller;
 
-import com.phegondev.usersmanagementsystem.dto.payloads.NewQuestionPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewQuestionPayload;
 import com.phegondev.usersmanagementsystem.dto.QuestionDto;
 import com.phegondev.usersmanagementsystem.service.QuestionService;
 import jakarta.validation.Valid;

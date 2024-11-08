@@ -1,7 +1,7 @@
 package com.phegondev.usersmanagementsystem.controller;
 
 import com.phegondev.usersmanagementsystem.dto.AnswerDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewAnswerPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewAnswerPayload;
 import com.phegondev.usersmanagementsystem.service.AnswerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.phegondev.usersmanagementsystem.dto.payloads;
+package com.phegondev.usersmanagementsystem.payloads;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;

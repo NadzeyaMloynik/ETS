@@ -1,20 +1,15 @@
 package com.phegondev.usersmanagementsystem.controller;
 
-import com.phegondev.usersmanagementsystem.dto.AssignmentDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewAssignmentPayload;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewNotificationPayload;
-import com.phegondev.usersmanagementsystem.dto.payloads.UpdateAssignmentPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewAssignmentPayload;
+import com.phegondev.usersmanagementsystem.payloads.UpdateAssignmentPayload;
 import com.phegondev.usersmanagementsystem.service.AssignmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +19,7 @@ public class AssignmentController {
     private final AssignmentService assignmentService;
 
     @Transactional
-    @PostMapping("/hr/assignment/from/{fromUserId/to/{toUserId}}")
+    @PostMapping("/hr/assignment/from/{fromUserId}/to/{toUserId}")
     public ResponseEntity<?> createAssignment (@PathVariable Integer fromUserId, @PathVariable Integer toUserId, @RequestBody NewAssignmentPayload payload, BindingResult bindingResult)
             throws BindException {
         if (bindingResult.hasErrors()) {

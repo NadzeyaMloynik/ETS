@@ -1,7 +1,7 @@
 package com.phegondev.usersmanagementsystem.controller;
 
 import com.phegondev.usersmanagementsystem.dto.NotificationDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewNotificationPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewNotificationPayload;
 import com.phegondev.usersmanagementsystem.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

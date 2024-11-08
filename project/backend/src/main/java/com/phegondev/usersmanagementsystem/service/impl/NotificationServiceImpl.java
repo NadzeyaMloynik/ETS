@@ -1,7 +1,7 @@
 package com.phegondev.usersmanagementsystem.service.impl;
 
 import com.phegondev.usersmanagementsystem.dto.NotificationDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewNotificationPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewNotificationPayload;
 import com.phegondev.usersmanagementsystem.entity.Notification;
 import com.phegondev.usersmanagementsystem.entity.Users;
 import com.phegondev.usersmanagementsystem.repository.NotificationRepository;

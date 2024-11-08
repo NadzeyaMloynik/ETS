@@ -1,7 +1,7 @@
 package com.phegondev.usersmanagementsystem.service;
 
 import com.phegondev.usersmanagementsystem.dto.NotificationDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewNotificationPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewNotificationPayload;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

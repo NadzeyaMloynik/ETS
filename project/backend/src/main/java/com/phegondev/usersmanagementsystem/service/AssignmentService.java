@@ -1,7 +1,7 @@
 package com.phegondev.usersmanagementsystem.service;
 
 import com.phegondev.usersmanagementsystem.dto.AssignmentDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewAssignmentPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewAssignmentPayload;
 import org.springframework.data.domain.Page;
 
 import java.util.Date;

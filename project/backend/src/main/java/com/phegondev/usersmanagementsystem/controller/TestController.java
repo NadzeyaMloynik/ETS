@@ -1,12 +1,10 @@
 package com.phegondev.usersmanagementsystem.controller;
 
 import com.phegondev.usersmanagementsystem.dto.TestDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewTestPayload;
-import com.phegondev.usersmanagementsystem.entity.Test;
+import com.phegondev.usersmanagementsystem.payloads.NewTestPayload;
 import com.phegondev.usersmanagementsystem.service.TestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

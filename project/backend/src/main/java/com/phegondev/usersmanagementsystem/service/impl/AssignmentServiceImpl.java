@@ -1,7 +1,7 @@
 package com.phegondev.usersmanagementsystem.service.impl;
 
 import com.phegondev.usersmanagementsystem.dto.AssignmentDto;
-import com.phegondev.usersmanagementsystem.dto.payloads.NewAssignmentPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewAssignmentPayload;
 import com.phegondev.usersmanagementsystem.entity.Assignment;
 import com.phegondev.usersmanagementsystem.entity.Users;
 import com.phegondev.usersmanagementsystem.repository.AssignmentRepository;
