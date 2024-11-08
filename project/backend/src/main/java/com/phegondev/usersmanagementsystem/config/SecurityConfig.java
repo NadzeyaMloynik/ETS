@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasAnyAuthority("USER")
                         .requestMatchers("/hr/**").hasAnyAuthority("HR")
                         .requestMatchers("/adminuser/**").hasAnyAuthority("ADMIN", "USER")
-                        .requestMatchers("/hruser/**").hasAnyAuthority("HR", "USER", "ADMIN")
+                        .requestMatchers("/hruser/**").hasAnyAuthority("HR", "USER")
                         .anyRequest().authenticated())
                 .sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

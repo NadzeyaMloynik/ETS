@@ -30,4 +30,8 @@ public class Assignment {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "assignment")
     private List<AssignmentDetail> assignmentDetailList;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "feedback_id", referencedColumnName = "feedback_id")
+    private Feedback feedback;
 }

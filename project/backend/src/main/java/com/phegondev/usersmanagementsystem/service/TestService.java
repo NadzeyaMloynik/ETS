@@ -1,5 +1,6 @@
 package com.phegondev.usersmanagementsystem.service;
 
+import com.phegondev.usersmanagementsystem.dto.TestDto;
 import org.springframework.data.domain.Page;
 import com.phegondev.usersmanagementsystem.entity.Test;
 
@@ -9,11 +10,11 @@ public interface TestService {
 
     Test create(String title, String description);
 
-    Optional<Test> findTest(Long id);
+    TestDto findTest(Long id);
 
     void updateTest(Long id, String title, String description);
 
     void deleteTest(Long id);
 
-    Page<Test> searchTests(int pageNo, String keyword);
+    Page<TestDto> searchTests(int pageNo, String keyword);
 }

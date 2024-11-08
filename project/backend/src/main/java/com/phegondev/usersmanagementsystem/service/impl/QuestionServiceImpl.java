@@ -69,6 +69,6 @@ public class QuestionServiceImpl implements QuestionService {
     public Page<QuestionDto> paginationQuestions(Long testId, int pageNo) {
         List<Question> questions = questionRepository.findAllByTestId(testId);
         Pageable pageable = PageRequest.of(pageNo, 10);
-        return PageUtil.toPage(questions, pageable);
+        return PageUtil.toPage(toDtoQuestionList(questions), pageable);
     }
 }

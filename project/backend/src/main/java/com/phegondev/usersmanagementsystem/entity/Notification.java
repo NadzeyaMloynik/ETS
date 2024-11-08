@@ -17,6 +17,8 @@ public class Notification {
     @Column(name = "notification_id")
     private Long id;
     private String title;
+    private String authorFirstname;
+    private String authorLastname;
     private String body;
     private Boolean isRead;
     @ManyToOne(fetch = FetchType.EAGER)

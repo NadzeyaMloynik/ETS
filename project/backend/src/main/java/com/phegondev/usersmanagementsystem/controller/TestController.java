@@ -1,5 +1,6 @@
 package com.phegondev.usersmanagementsystem.controller;
 
+import com.phegondev.usersmanagementsystem.dto.TestDto;
 import com.phegondev.usersmanagementsystem.dto.payloads.NewTestPayload;
 import com.phegondev.usersmanagementsystem.entity.Test;
 import com.phegondev.usersmanagementsystem.service.TestService;
@@ -14,6 +15,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping
@@ -21,16 +24,16 @@ public class TestController {
     private final TestService testService;
 
     @GetMapping("/hruser/test")
-    public ResponseEntity<Page<Test>> getAllTests(@RequestParam(required = false, name = "pageNo") int pageNo, @RequestParam(required = false, name = "keyword") String keyword) {
+    public ResponseEntity<?> getAllTests(@RequestParam(required = false, name = "pageNo") int pageNo, @RequestParam(required = false, name = "keyword") String keyword) {
         return ResponseEntity.ok(testService.searchTests(pageNo, keyword));
     }
 
     @GetMapping("/hruser/test/{id}")
-    public ResponseEntity<Test> getTestById(@PathVariable Long id) {
+    public ResponseEntity<?> getTestById(@PathVariable Long id) {
         try {
-            Test test = testService.findTest(id).orElseThrow(() -> new NoSuchFieldException("Test not found with id: " + id));
+            TestDto test = testService.findTest(id);
             return ResponseEntity.ok(test);
-        } catch (NoSuchFieldException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

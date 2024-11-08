@@ -1,9 +1,13 @@
 package com.phegondev.usersmanagementsystem.util;
 
 import com.phegondev.usersmanagementsystem.dto.AnswerDto;
+import com.phegondev.usersmanagementsystem.dto.NotificationDto;
 import com.phegondev.usersmanagementsystem.dto.QuestionDto;
+import com.phegondev.usersmanagementsystem.dto.TestDto;
 import com.phegondev.usersmanagementsystem.entity.Answer;
+import com.phegondev.usersmanagementsystem.entity.Notification;
 import com.phegondev.usersmanagementsystem.entity.Question;
+import com.phegondev.usersmanagementsystem.entity.Test;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -53,4 +57,44 @@ public class DtoUtil {
         return null;
     }
 
+    public static NotificationDto toDtoNotification(Notification notification) {
+        NotificationDto notificationDto = new NotificationDto();
+        notificationDto.setId(notification.getId());
+        notificationDto.setTitle(notification.getTitle());
+        notificationDto.setBody(notification.getBody());
+        notificationDto.setAuthorFirstname(notification.getAuthorFirstname());
+        notificationDto.setAuthorLastname(notification.getAuthorLastname());
+        notificationDto.setIsRead(notification.getIsRead());
+        return notificationDto;
+    }
+
+    public static List<NotificationDto> toDtoNotificationList(List<Notification> notifications) {
+        List<NotificationDto> notificationDtos = new ArrayList<>();
+        if(notifications != null) {
+            for(Notification notification : notifications) {
+                notificationDtos.add(toDtoNotification(notification));
+            }
+            return notificationDtos;
+        }
+        return null;
+    }
+
+    public static TestDto toDtoTest(Test test) {
+        TestDto testDto = new TestDto();
+        testDto.setId(test.getId());
+        testDto.setName(testDto.getName());
+        testDto.setDescription(test.getDescription());
+        testDto.setQuestions(toDtoQuestionList(test.getQuestions()));
+        return testDto;
+    }
+
+    public static List<TestDto> toDtoTestList(List<Test> tests) {
+        List<TestDto> testDtos = new ArrayList<>();
+        if(tests != null) {
+            for(Test test : tests) {
+                testDtos.add(toDtoTest(test));
+            }
+        }
+        return testDtos;
+    }
 }
