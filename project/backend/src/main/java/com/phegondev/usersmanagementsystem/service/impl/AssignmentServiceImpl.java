@@ -4,9 +4,11 @@ import com.phegondev.usersmanagementsystem.dto.AssignmentDto;
 import com.phegondev.usersmanagementsystem.payloads.NewAssignmentPayload;
 import com.phegondev.usersmanagementsystem.entity.Assignment;
 import com.phegondev.usersmanagementsystem.entity.Users;
+import com.phegondev.usersmanagementsystem.payloads.NewNotificationPayload;
 import com.phegondev.usersmanagementsystem.repository.AssignmentRepository;
 import com.phegondev.usersmanagementsystem.repository.UsersRepo;
 import com.phegondev.usersmanagementsystem.service.AssignmentService;
+import com.phegondev.usersmanagementsystem.service.NotificationService;
 import com.phegondev.usersmanagementsystem.util.DtoUtil;
 import com.phegondev.usersmanagementsystem.util.PageUtil;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
     private final UsersRepo usersRepo;
+    private final NotificationService notificationService;
 
     @Override
     public AssignmentDto create(Integer toUserId, Integer fromUserId, NewAssignmentPayload payload) {
@@ -36,7 +39,8 @@ public class AssignmentServiceImpl implements AssignmentService {
         Optional<Users> fromUser = usersRepo.findById(fromUserId);
 
         if (toUser.isPresent() && fromUser.isPresent()) {
-            Assignment assignment = new Assignment(null, payload.startDate(), payload.closeDate(), toUser.get(), fromUser.get(), null);
+            Assignment assignment = new Assignment(null, payload.startDate(), payload.closeDate(), false, payload.name(),toUser.get(), fromUser.get(), null);
+            this.notificationService.create(toUserId, new NewNotificationPayload("Новое задание", "Создано задание: " + assignment.getName() + " закрыто для выполнения."));
             return DtoUtil.toDtoAssignment(this.assignmentRepository.save(assignment));
         }
         else {
@@ -48,7 +52,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     public void updateCloseDate(Long id, Date closeDate) {
         this.assignmentRepository.findById(id)
                 .ifPresentOrElse(a -> {
-                    a.setStartDate(closeDate);
+                    a.setCloseDate(closeDate);
                     this.assignmentRepository.save(a);
                 }, () -> {
                     throw new NoSuchElementException();
@@ -83,17 +87,30 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public Page<AssignmentDto> paginationAssignmentFromUser(Integer fromUserId, int pageNo) {
+    public Page<AssignmentDto> paginationAssignmentFromUser(Integer fromUserId, int pageNo, int count) {
         List<Assignment> assignments = this.assignmentRepository.findAllByFromUserId(fromUserId);
-        Pageable pageable = PageRequest.of(pageNo, 10);
+        Pageable pageable = PageRequest.of(pageNo, count);
         return PageUtil.toPage(toDtoAssignmentList(assignments), pageable);
     }
 
     @Override
-    public Page<AssignmentDto> paginationAssignmentToUser(Integer toUserId, int pageNo) {
-        List<Assignment> assignments = this.assignmentRepository.findAllByFromUserId(toUserId);
-        Pageable pageable = PageRequest.of(pageNo, 10);
+    public Page<AssignmentDto> paginationAssignmentToUser(Integer toUserId, int pageNo, int count) {
+        List<Assignment> assignments = this.assignmentRepository.findAllByToUserId(toUserId);
+        Pageable pageable = PageRequest.of(pageNo, count);
         return PageUtil.toPage(toDtoAssignmentList(assignments), pageable);
     }
 
+    @Override
+    public Page<AssignmentDto> findAllByStartDateBetween(Date startDate, Date endDate, int pageNo, Integer fromUserId) {
+        List<Assignment> assignments = this.assignmentRepository.findAllByStartDateBetween(startDate, endDate, fromUserId);
+        Pageable pageable = PageRequest.of(pageNo, 4);
+        return PageUtil.toPage(toDtoAssignmentList(assignments), pageable);
+    }
+
+    @Override
+    public Page<AssignmentDto> findAllSortedByIsOpen(int pageNo, Integer fromUserId) {
+        List<Assignment> assignments =assignmentRepository.findAllSortedByIsOpen(fromUserId);
+        Pageable pageable = PageRequest.of(pageNo, 3);
+        return PageUtil.toPage(toDtoAssignmentList(assignments), pageable);
+    }
 }

@@ -17,7 +17,7 @@ public class Feedback {
     private Long id;
     private String message;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "assignment_detail_id", referencedColumnName = "assignment_detail_id")
     private AssignmentDetail assignmentDetail;
 }

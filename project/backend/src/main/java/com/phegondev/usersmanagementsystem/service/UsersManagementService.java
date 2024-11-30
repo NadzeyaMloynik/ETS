@@ -1,6 +1,7 @@
 package com.phegondev.usersmanagementsystem.service;
 
 import com.phegondev.usersmanagementsystem.dto.ReqRes;
+import com.phegondev.usersmanagementsystem.dto.UserDto;
 import com.phegondev.usersmanagementsystem.entity.Users;
 import com.phegondev.usersmanagementsystem.repository.UsersRepo;
 import com.phegondev.usersmanagementsystem.util.ImageUtil;
@@ -19,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import static com.phegondev.usersmanagementsystem.util.DtoUtil.toDtoUserList;
+
 @Service
 public class UsersManagementService {
 
@@ -30,6 +33,19 @@ public class UsersManagementService {
     private AuthenticationManager authenticationManager;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public Page<UserDto> SearchUsersPagination(int pageNo, String keyword) {
+        List<Users> users = usersRepo.searchByNameOrLastname(keyword);
+        Pageable pageable = PageRequest.of(pageNo, 10);
+        return PageUtil.toPage(toDtoUserList(users), pageable);
+    }
+
+
+    public Page<UserDto> getUsersPagination(int pageNo) {
+        List<Users> users = usersRepo.findAll();
+        Pageable pageable = PageRequest.of(pageNo, 10);
+        return PageUtil.toPage(toDtoUserList(users), pageable);
+    }
 
     public byte[] getImage(Integer userId){
         try{
@@ -127,6 +143,7 @@ public class UsersManagementService {
             response.setToken(jwt);
             response.setRole(user.getRole());
             response.setRefreshToken(refreshToken);
+            response.setId(user.getId());
             response.setExpirationTime("24Hrs");
             response.setMessage("Successfully Logged In");
 

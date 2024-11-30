@@ -1,7 +1,9 @@
 package com.phegondev.usersmanagementsystem.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phegondev.usersmanagementsystem.dto.AnswerDto;
 import com.phegondev.usersmanagementsystem.payloads.NewAnswerPayload;
+import com.phegondev.usersmanagementsystem.payloads.NewQuestionPayload;
 import com.phegondev.usersmanagementsystem.service.AnswerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.testng.reporters.jq.Model;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -27,44 +30,39 @@ public class AnswerController {
 
     @Transactional
     @PostMapping("/hr/answer/{questionId}")
-    public ResponseEntity<?> createAnswer(@PathVariable Long questionId, @Valid @RequestBody NewAnswerPayload payload, BindingResult bindingResult)
-            throws BindException {
-        if (bindingResult.hasErrors()) {
-            if (bindingResult instanceof BindException exception) {
-                throw exception;
-            } else {
-                throw new BindException(bindingResult);
-            }
-        } else {
+    public ResponseEntity<?> createAnswer(@PathVariable Long questionId,  @RequestParam("payload") String payloadJson,
+                                          @RequestParam(value = "image", required = false) MultipartFile image) {
             try{
-                return ResponseEntity.ok(this.answerService.create(questionId, payload.text(), payload.isCorrect(), payload.points()));
+                ObjectMapper objectMapper = new ObjectMapper();
+                NewAnswerPayload payload = objectMapper.readValue(payloadJson, NewAnswerPayload.class);
+
+                return ResponseEntity.ok(this.answerService.create(questionId, payload, image));
             } catch (NoSuchElementException e) {
                 return ResponseEntity.notFound().build();
             }catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
             }
-        }
     }
 
     @Transactional
     @PutMapping("/hr/answer/{id}")
-    public ResponseEntity<?> updateAnswer(@PathVariable Long id, @Valid @RequestBody NewAnswerPayload payload, BindingResult bindingResult)
-            throws BindException {
-        if (bindingResult.hasErrors()) {
-            if (bindingResult instanceof BindException exception) {
-                throw exception;
-            } else {
-                throw new BindException(bindingResult);
+    public ResponseEntity<?> updateAnswer(@PathVariable Long id, @RequestParam("payload") String payloadJson,
+                                          @RequestParam(value = "image", required = false) MultipartFile image) {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                NewAnswerPayload payload = objectMapper.readValue(payloadJson, NewAnswerPayload.class);
+
+                this.answerService.updateAnswer(id, payload, image);
+                return ResponseEntity.noContent().build();
             }
-        } else {
-            this.answerService.update(id, payload.text(), payload.isCorrect(), payload.points());
-            return ResponseEntity.noContent().build();
-        }
+            catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
     }
 
     @Transactional
     @DeleteMapping("/hr/answer/{id}")
-    public ResponseEntity<?> deleteAnswer(Long id){
+    public ResponseEntity<?> deleteAnswer(@PathVariable Long id){
         try {
             this.answerService.delete(id);
             return ResponseEntity.noContent().build();

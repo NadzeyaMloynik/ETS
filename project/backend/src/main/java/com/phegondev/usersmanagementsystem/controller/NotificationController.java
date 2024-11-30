@@ -55,7 +55,7 @@ public class NotificationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/hruser/notification/{userId}")
+    @GetMapping("/hruser/notification/{userId}/all")
     public ResponseEntity<?> findAllNotifications(@PathVariable Integer userId){
         return ResponseEntity.ok(this.notificationService.findAll(userId));
     }
@@ -66,7 +66,9 @@ public class NotificationController {
     }
 
     @GetMapping("/hruser/notification/{userId}/pagination")
-    Page<NotificationDto> paginationNotification(@PathVariable Integer userId, @RequestParam(required = false, name = "pageNo") int pageNo){
-        return this.notificationService.paginationNotification(userId, pageNo);
+    public ResponseEntity<?> paginationNotification(@PathVariable Integer userId,
+            @RequestParam(name = "pageNo", defaultValue = "0") int pageNo
+    ) {
+        return ResponseEntity.ok(this.notificationService.paginationNotification(userId, pageNo));
     }
 }

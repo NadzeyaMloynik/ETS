@@ -1,42 +1,49 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import { adminRoutes, authRoutes, publicRoutes } from "../../routes";
-import { LOGIN_ROUTE } from "../../utils/consts";
+import { adminRoutes, hrRoutes, publicRoutes, userRoutes } from "../../routes";
+import { HOME_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE } from "../../utils/consts";
 import UserService from "../service/UserService";
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../common/AuthContext";
+import WaitingComponent from "./WaitingComponent";
 
 const AppRouter = () => {
   const [profileInfo, setProfileInfo] = useState({});
+  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, logout } = useAuth();
 
   useEffect(() => {
-    fetchProfileInfo();
-  }, []);
+  }, [isAuthenticated]);
 
-  const fetchProfileInfo = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await UserService.getYourProfile(token);
-      setProfileInfo(response.ourUsers);
-      console.log("Updated profileInfo:", response.ourUsers);
-    } catch (error) {
-      console.error("Error fetching profile information:", error);
-    }
-  };
   return (
     <Routes>
-      {profileInfo.role === "ADMIN" &&
+      {localStorage.getItem("role") === "ADMIN" &&
         adminRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} exact />
         ))}
 
-      {profileInfo.isAuthenticated &&
-        authRoutes.map(({ path, element }) => (
+        {localStorage.getItem("role") === "HR" &&
+        hrRoutes.map(({ path, element }) => (
           <Route key={path} path={path} element={element} exact />
         ))}
 
+        {localStorage.getItem("role") === "USER" &&
+        userRoutes.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} exact />
+        ))}
+
+        {publicRoutes
+        .filter(
+          ({ path }) =>
+            path !== REGISTRATION_ROUTE || profileInfo.role !== "ADMIN"
+        )
+        .map(({ path, element }) => (
+          <Route key={path} path={path} element={element} exact />
+        ))}
+        
       {publicRoutes.map(({ path, element }) => (
         <Route key={path} path={path} element={element} exact />
       ))}
-      {/* <Route path="*" element={<Navigate to={LOGIN_ROUTE} />} exact /> */}
+      <Route path="*" element={<Navigate to={HOME_ROUTE} />} exact />
     </Routes>
   );
 };

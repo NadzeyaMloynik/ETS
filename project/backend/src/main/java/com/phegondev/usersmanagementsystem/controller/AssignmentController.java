@@ -1,15 +1,19 @@
 package com.phegondev.usersmanagementsystem.controller;
 
+import com.phegondev.usersmanagementsystem.dto.AssignmentDto;
 import com.phegondev.usersmanagementsystem.payloads.NewAssignmentPayload;
 import com.phegondev.usersmanagementsystem.payloads.UpdateAssignmentPayload;
 import com.phegondev.usersmanagementsystem.service.AssignmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,12 +76,29 @@ public class AssignmentController {
     }
 
     @GetMapping("/hruser/from/{fromUserId}/pagination")
-    public ResponseEntity<?> paginationAssignmentsFromUser(@PathVariable Integer fromUserId, @RequestParam(required = false, name = "pageNo") int pageNo){
-        return ResponseEntity.ok(this.assignmentService.paginationAssignmentFromUser(fromUserId, pageNo));
+    public ResponseEntity<?> paginationAssignmentsFromUser(@PathVariable Integer fromUserId, @RequestParam(required = false, name = "pageNo") int pageNo,
+                                                           @RequestParam(required = false, name = "count") int count){
+        return ResponseEntity.ok(this.assignmentService.paginationAssignmentFromUser(fromUserId, pageNo, count));
     }
 
     @GetMapping("/hruser/to/{toUserId}/pagination")
-    public ResponseEntity<?> paginationAssignmentsToUser(@PathVariable Integer toUserId, @RequestParam(required = false, name = "pageNo") int pageNo){
-        return ResponseEntity.ok(this.assignmentService.paginationAssignmentToUser(toUserId, pageNo));
+    public ResponseEntity<?> paginationAssignmentsToUser(@PathVariable Integer toUserId, @RequestParam(required = false, name = "pageNo") int pageNo,
+                                                         @RequestParam(required = false, name = "count") int count){
+        return ResponseEntity.ok(this.assignmentService.paginationAssignmentToUser(toUserId, pageNo, count));
+    }
+
+    @GetMapping("/hr/assignments/by-date-range/{fromUserId}")
+    public ResponseEntity<?> getByDateRange(
+            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+            @RequestParam(required = false, name = "pageNo") int pageNo,
+            @PathVariable Integer fromUserId) {
+        return ResponseEntity.ok(this.assignmentService.findAllByStartDateBetween(startDate, endDate, pageNo, fromUserId));
+    }
+
+    @GetMapping("/hr/open-assignments/{fromUserId}")
+    public ResponseEntity<?> getSortedByIsOpen(@RequestParam(required = false, name = "pageNo") int pageNo,
+                                               @PathVariable Integer fromUserId) {
+        return ResponseEntity.ok(this.assignmentService.findAllSortedByIsOpen(pageNo, fromUserId));
     }
 }

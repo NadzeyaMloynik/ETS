@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import UserService from "../service/UserService";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Image,
+} from "react-bootstrap";
 import { LOGIN_ROUTE, ADMIN_ROUTE } from "../../utils/consts";
 import "../styles/Registration.css";
+import loginPic from "../assets/mountains_high_res_sharp.png";
 
 function RegistrationPage() {
   const [profileInfo, setProfileInfo] = useState({});
@@ -15,6 +19,7 @@ function RegistrationPage() {
     role: "USER",
     city: "",
   });
+  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     fetchProfileInfo();
@@ -41,14 +46,16 @@ function RegistrationPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role")
       const response = await UserService.register(formData, token);
-      if (profileInfo.role === "ADMIN" ) {
-        navigate(ADMIN_ROUTE)
+      if (role === "ADMIN") {
+        navigate(ADMIN_ROUTE);
       }
-      navigate(LOGIN_ROUTE);
-      alert(response.message);
+      else{
+      navigate(LOGIN_ROUTE);}
     } catch (error) {
       console.error("Error registering user:", error);
       alert(error.response.data.message);
@@ -56,65 +63,72 @@ function RegistrationPage() {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Регистрация</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>*</label>
-          <input
-            type="text"
-            placeholder="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>*</label>
-          <input
-            type="email"
-            placeholder="Email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>*</label>
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>*</label>
-          <input
-            type="password"
-            placeholder="Repeat password"
-            name="repPassword"
-            value={formData.repPassword}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <label>*</label>
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleInputChange}
-            placeholder="Enter your city"
-            required
-          />
-        </div>
-        {profileInfo.role === "ADMIN" ? (
+    <div className="register-main-container">
+    <Image src={loginPic} />
+      <div className="auth-container">
+        <h2>Регистрация</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>*</label>
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>*</label>
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>*</label>
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>*</label>
+            <input
+              type="password"
+              placeholder="Repeat password"
+              name="repPassword"
+              value={formData.repPassword}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          {profileInfo.role !== "ADMIN" ?
+            <div className="form-group">
+            <input
+              type="checkbox"
+              id="agree"
+              checked={isChecked}
+              onChange={(e) => setIsChecked(e.target.checked)}
+              required
+            />
+            <label htmlFor="agree">
+              Я соглашаюсь на обработку данных
+            </label>
+          </div>
+          : <></>
+          }
+          
+          {profileInfo.role === "ADMIN" ? (
             <div className="role">
               <div className="dropdown mt-2">
                 <button
@@ -126,7 +140,7 @@ function RegistrationPage() {
                 >
                   {"Выберите роль"}
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu roles">
                   <Link
                     className="dropdown-item"
                     onClick={() => handleRoleSelect("ADMIN")}
@@ -150,9 +164,15 @@ function RegistrationPage() {
               <input
                 type="text"
                 name="city"
-                value={formData.role === "ADMIN" ? "Администратор" : 
-                formData.role === "USER" ? "Сотрудник" : 
-                formData.role === "HR" ? "HR" : "Роль не выбрана"}
+                value={
+                  formData.role === "ADMIN"
+                    ? "Администратор"
+                    : formData.role === "USER"
+                    ? "Сотрудник"
+                    : formData.role === "HR"
+                    ? "HR"
+                    : "Роль не выбрана"
+                }
                 onChange={handleInputChange}
                 placeholder="Role"
                 disabled
@@ -162,8 +182,9 @@ function RegistrationPage() {
           ) : (
             <></>
           )}
-        <button type="submit">Зарегистрироваться</button>
-      </form>
+          <button type="submit">Зарегистрироваться</button>
+        </form>
+      </div>
     </div>
   );
 }

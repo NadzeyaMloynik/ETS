@@ -1,11 +1,13 @@
 package com.phegondev.usersmanagementsystem.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phegondev.usersmanagementsystem.dto.AssignmentDetailDto;
-import com.phegondev.usersmanagementsystem.entity.Assignment;
-import com.phegondev.usersmanagementsystem.entity.AssignmentDetail;
-import com.phegondev.usersmanagementsystem.payloads.AssignmentDetailPayload;
+import com.phegondev.usersmanagementsystem.entity.*;
+import com.phegondev.usersmanagementsystem.payloads.CountAnswerResultPayload;
 import com.phegondev.usersmanagementsystem.repository.AssignmentDetailRepository;
 import com.phegondev.usersmanagementsystem.repository.AssignmentRepository;
+import com.phegondev.usersmanagementsystem.repository.TestRepository;
 import com.phegondev.usersmanagementsystem.service.AssignmentDetailService;
 import com.phegondev.usersmanagementsystem.util.DtoUtil;
 import com.phegondev.usersmanagementsystem.util.PageUtil;
@@ -15,9 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static com.phegondev.usersmanagementsystem.util.DtoUtil.toDtoAssignmentDetailList;
 
@@ -27,26 +27,34 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
 
     private final AssignmentDetailRepository repository;
     private final AssignmentRepository assignmentRepository;
+    private final TestRepository testRepository;
 
     @Override
-    public AssignmentDetailDto create(Long assignmentId) {
-        Optional<Assignment> assignment = this.assignmentRepository.findById(assignmentId);
-        if (assignment.isPresent()) {
-            return DtoUtil.toDtoAssignmentDetail(this.repository.save(new AssignmentDetail(null, null, false, assignment.get(), null, null)));
-        } else {
-            throw new NoSuchElementException();
-        }
-    }
+    public List<AssignmentDetailDto> create(Long assignmentId, List<Long> testIds) {
+        Assignment assignment = this.assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new NoSuchElementException("Assignment with ID " + assignmentId + " not found"));
 
-    @Override
-    public void update(Long id, AssignmentDetailPayload payload) {
-        Optional<AssignmentDetail> assignmentDetail = this.repository.findById(id);
-        if (assignmentDetail.isPresent()) {
-            assignmentDetail.get().setResult(payload.result());
-            this.repository.save(assignmentDetail.get());
-        } else {
-            throw new NoSuchElementException();
+        List<AssignmentDetail> assignmentDetails = new ArrayList<>();
+
+        for (Long testId : testIds) {
+            Test test = testRepository.findById(testId)
+                    .orElseThrow(() -> new NoSuchElementException("Test with ID " + testId + " not found"));
+
+            Integer maxResult = 0;
+            for (Question question : test.getQuestions()) {
+                for (Answer answer : question.getAnswers()) {
+                    if (answer.getIsCorrect()){
+                        maxResult += answer.getPoints();
+                    }
+                }
+            }
+
+            AssignmentDetail assignmentDetail = new AssignmentDetail(
+                    null, null, maxResult,false, assignment, test, null, null
+            );
+            assignmentDetails.add(assignmentDetail);
         }
+        return DtoUtil.toDtoAssignmentDetailList(this.repository.saveAll(assignmentDetails));
     }
 
     @Override
@@ -75,6 +83,38 @@ public class AssignmentDetailServiceImpl implements AssignmentDetailService {
         Pageable pageable = PageRequest.of(pageNo, 10);
         return PageUtil.toPage(toDtoAssignmentDetailList(assignmentDetails), pageable);
     }
+    @Override
+    public void passTestAssignmentDetail(Long assignmentDetailId, Map<Long, List<CountAnswerResultPayload>> payloads) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(payloads);
+        Integer result = 0;
+
+        for (Map.Entry<Long, List<CountAnswerResultPayload>> entry : payloads.entrySet()) {
+            Boolean isCorrect = true;
+            Integer tempResult = 0;
+            for (CountAnswerResultPayload payload : entry.getValue()) {
+                if (payload.isCorrect()) {
+                    tempResult += payload.points();
+                } else {
+                    isCorrect = false;
+                    break;
+                }
+            }
+            if(isCorrect){
+                result += tempResult;
+            }
+        }
+
+        Optional<AssignmentDetail> assignmentDetail = Optional.ofNullable(repository.findById(assignmentDetailId)
+                .orElseThrow(() -> new NoSuchElementException("Assignment detail with ID " + assignmentDetailId + " not found")));
+
+        AssignmentDetail newAssignmentDetail = assignmentDetail.get();
+        newAssignmentDetail.setResult(result);
+        newAssignmentDetail.setIsPassed(true);
+        newAssignmentDetail.setTestAnswers(json);
+        this.repository.save(newAssignmentDetail);
+    }
+
 
 
 }

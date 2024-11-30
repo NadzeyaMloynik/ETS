@@ -21,7 +21,7 @@ function UpdateUser() {
   const fetchUserDataById = async (userId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await UserService.getUserById(userId, token); // Pass userId to getUserById
+      const response = await UserService.getUserById(userId, token); 
       const { name, email, role, city } = response.ourUsers;
       setUserData({ name, email, role, city });
     } catch (error) {
@@ -45,7 +45,6 @@ function UpdateUser() {
       if (confirmDelete) {
         const token = localStorage.getItem('token');
         const res = await UserService.updateUser(userId, userData, token);
-        console.log(res)
         navigate("/admin/user-management")
       }
 

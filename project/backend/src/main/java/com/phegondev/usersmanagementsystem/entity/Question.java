@@ -22,6 +22,10 @@ public class Question {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "test_id", referencedColumnName = "test_id")
     private Test test;
-    @OneToMany(cascade = CascadeType.DETACH, mappedBy = "question")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "question")
     private List<Answer> answers;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] image;
 }

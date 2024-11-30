@@ -1,0 +1,26 @@
+.home-header {
+    background-color: rgba(222, 117, 25, 0.778);
+    border-bottom: rgb(78, 78, 78) 2px solid;
+}
+
+.home-button {
+    color: #fff !important;
+    background-color: rgb(78, 78, 78) !important;
+    padding: 10px !important;
+    border: none !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.home-button:hover {
+    background-color: rgb(58, 58, 58) !important;
+    color: #a4a4a4 !important;
+}
+
+.home-card{
+    transition: 0.3s ease;
+}
+
+.home-card:hover {
+    transform: scale(0.9);
+  box-shadow: 21px 21px 25px 7px rgba(109, 109, 109, 0.2) !important;
+}

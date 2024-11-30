@@ -21,6 +21,8 @@ public class Assignment {
     private Long id;
     private Date startDate;
     private Date closeDate;
+    private Boolean isOpen;
+    private String name;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "to_user_id", referencedColumnName = "id")
     private Users toUser;
@@ -31,4 +33,5 @@ public class Assignment {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "assignment")
     private List<AssignmentDetail> assignmentDetailList;
+
 }

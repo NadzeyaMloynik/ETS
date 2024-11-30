@@ -17,7 +17,7 @@ function ProfilePage() {
             const token = localStorage.getItem('token');
             const response = await UserService.getYourProfile(token);
             setProfileInfo(response.ourUsers);
-            setProfilePhotoUrl(response.ourUsers.photoUrl); // Подразумевается, что photoUrl возвращается сервером
+            setProfilePhotoUrl(response.ourUsers.photoUrl);
         } catch (error) {
             console.error('Error fetching profile information:', error);
         }

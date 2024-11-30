@@ -72,8 +72,7 @@ public class TestController {
                 throw new BindException(bindingResult);
             }
         } else {
-            this.testService.updateTest(id, payload.title(), payload.description());
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(this.testService.updateTest(id, payload.title(), payload.description()));
         }
     }
 }

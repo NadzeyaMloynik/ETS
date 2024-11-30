@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.catalina.User;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,11 +20,10 @@ public class Notification {
     @Column(name = "notification_id")
     private Long id;
     private String title;
-    private String authorFirstname;
-    private String authorLastname;
     private String body;
     private Boolean isRead;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users user;
+    private LocalDate date;
 }

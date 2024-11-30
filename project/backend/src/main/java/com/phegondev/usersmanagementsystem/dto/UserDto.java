@@ -13,4 +13,7 @@ public class UserDto {
     private String city;
     private String lastname;
     private String position;
+    private String email;
+    private byte[] image;
+    private String role;
 }

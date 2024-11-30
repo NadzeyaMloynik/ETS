@@ -1,16 +1,18 @@
 package com.phegondev.usersmanagementsystem.controller;
 
-import com.phegondev.usersmanagementsystem.payloads.AssignmentDetailPayload;
+import com.phegondev.usersmanagementsystem.dto.AssignmentDetailDto;
+import com.phegondev.usersmanagementsystem.payloads.CountAnswerResultPayload;
 import com.phegondev.usersmanagementsystem.service.AssignmentDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,38 +22,37 @@ public class AssignmentDetailController {
     private final AssignmentDetailService assignmentDetailService;
 
     @Transactional
-    @PostMapping("/hr/assigment-detail/{assignmentId}")
-    public ResponseEntity<?> createAssignmentDetail (@PathVariable Long assignmentId){
+    @PostMapping("/hr/assignment-detail/{assignmentId}")
+    public ResponseEntity<?> createAssignmentDetail(
+            @PathVariable Long assignmentId,
+            @RequestBody List<Long> testIds) {
+
         try {
-            return ResponseEntity.ok(this.assignmentDetailService.create(assignmentId));
+            List<AssignmentDetailDto> createdAssignmentDetails = this.assignmentDetailService.create(assignmentId, testIds);
+            return ResponseEntity.ok(createdAssignmentDetails);
+
         } catch (NoSuchElementException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @Transactional
-    @PutMapping("/hr/assignment-detail/{id}")
-    public ResponseEntity<?> updateAssignmentDetail (@PathVariable Long id, @RequestBody AssignmentDetailPayload payload, BindingResult bindingResult)
-            throws BindException {
-        if (bindingResult.hasErrors()) {
-            if (bindingResult instanceof BindException exception) {
-                throw exception;
-            } else {
-                throw new BindException(bindingResult);
-            }
-        } else {
-            try {
-                this.assignmentDetailService.update(id, payload);
-                return ResponseEntity.noContent().build();
-            } catch (NoSuchElementException e) {
-                return ResponseEntity.notFound().build();
-            } catch (Exception e) {
-                return ResponseEntity.internalServerError().build();
-            }
+    @PutMapping("/user/assignment-detail/{assignmentId}")
+    public ResponseEntity<?> passTestAssignmentDetail(@PathVariable Long assignmentId, @RequestBody Map<Long, List<CountAnswerResultPayload>> payloads){
+        try {
+            this.assignmentDetailService.passTestAssignmentDetail(assignmentId, payloads);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     @Transactional
     @DeleteMapping("/hr/assignment-detail/{id}")

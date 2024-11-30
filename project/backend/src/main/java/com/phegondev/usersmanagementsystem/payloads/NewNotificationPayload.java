@@ -8,11 +8,5 @@ public record NewNotificationPayload (
     @Size(max = 100)
     String title,
     @NotNull
-    @Size(max = 30)
-    String authorFirstname,
-    @NotNull
-    @Size(max = 40)
-    String authorLastname,
-    @NotNull
     @Size(max = 1000)
     String body){}

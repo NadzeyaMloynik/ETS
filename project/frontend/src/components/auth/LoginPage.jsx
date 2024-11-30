@@ -1,34 +1,46 @@
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UserService from "../service/UserService";
 import "../styles/Login.css";
-import {Button, ButtonGroup, Container, Nav, Navbar,  NavDropdown, Image} from "react-bootstrap";
-import { ADMIN_ROUTE } from "../../utils/consts";
-import { useAuth } from '../common/AuthContext'; 
+import { Image } from "react-bootstrap";
+import { ADMIN_ROUTE, PROFILE_ROUTE, TESTS_ROUTE } from "../../utils/consts";
+import { useAuth } from "../common/AuthContext";
+import loginPic from "../assets/mountains_high_res_sharp.png";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); 
+  const { login, isAuthenticated } = useAuth();
+  const [role, setRole] = useState(""); 
   
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (role === "ADMIN") {
+        navigate(ADMIN_ROUTE);
+      } else if (role === "HR") {
+        navigate(TESTS_ROUTE);
+      } else if (role === "USER") {
+        navigate(PROFILE_ROUTE);
+      }
+    }
+  }, [isAuthenticated, role, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const userData = await UserService.login(email, password);
-      console.log(userData);
       if (userData.token) {
         localStorage.setItem("token", userData.token);
+        console.log("token: ", userData.token);
         localStorage.setItem("role", userData.role);
-        console.log(userData.role)
-        login();
-        if(userData.role === 'ADMIN'){
-          navigate(ADMIN_ROUTE)
-        }
+        localStorage.setItem("id", userData.id);
+        setRole(userData.role); 
+        await login(); 
       } else {
-        setError(userData.message);
+        setError("Логин или пароль неверны");
       }
     } catch (error) {
       console.log(error);
@@ -39,15 +51,11 @@ function LoginPage() {
     }
   };
 
-  
-
   return (
     <div className="main-login-container">
       <div className="auth-container-login">
         <h2>Вход</h2>
-        <div className="error-message">
-        {error && <p>{error}</p>}
-        </div>
+        <div className="error-message">{error && <p>{error}</p>}</div>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input
@@ -65,11 +73,10 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {/* <NavLink>Забыли пароль?</NavLink> */}
-          <button type="submit" >Войти</button>
-          
+          <button type="submit">Войти</button>
         </form>
       </div>
+      <Image src={loginPic} />
     </div>
   );
 }

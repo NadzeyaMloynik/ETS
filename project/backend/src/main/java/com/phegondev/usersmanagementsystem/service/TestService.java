@@ -12,7 +12,7 @@ public interface TestService {
 
     TestDto findTest(Long id);
 
-    void updateTest(Long id, String title, String description);
+    TestDto updateTest(Long id, String title, String description);
 
     void deleteTest(Long id);
 

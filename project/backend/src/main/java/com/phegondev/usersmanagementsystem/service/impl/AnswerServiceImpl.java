@@ -3,6 +3,7 @@ package com.phegondev.usersmanagementsystem.service.impl;
 import com.phegondev.usersmanagementsystem.dto.AnswerDto;
 import com.phegondev.usersmanagementsystem.entity.Answer;
 import com.phegondev.usersmanagementsystem.entity.Question;
+import com.phegondev.usersmanagementsystem.payloads.NewAnswerPayload;
 import com.phegondev.usersmanagementsystem.repository.AnswerRepository;
 import com.phegondev.usersmanagementsystem.repository.QuestionRepository;
 import com.phegondev.usersmanagementsystem.service.AnswerService;
@@ -26,10 +27,13 @@ public class AnswerServiceImpl implements AnswerService {
     private final QuestionRepository questionRepository;
 
     @Override
-    public AnswerDto create(Long questionId, String text, Boolean isCorrect, Integer points) {
+    public AnswerDto create(Long questionId, NewAnswerPayload payload, MultipartFile image) throws IOException {
         Optional<Question> question = this.questionRepository.findById(questionId);
         if (question.isPresent()) {
-            Answer answer = answerRepository.save(new Answer(null, text, points, isCorrect,question.get(), null));
+            Answer answer = answerRepository.save(new Answer(null, payload.text(), payload.points(), payload.isCorrect(), question.get(), null));
+            if(image != null) {
+                answer.setImage(ImageUtil.compressImage(image.getBytes()));
+            }
             return DtoUtil.toDtoAnswer(answer);
         }
         else {
@@ -38,12 +42,21 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void update(Long id, String text, Boolean isCorrect, Integer points) {
+    public void updateAnswer(Long id, NewAnswerPayload payload, MultipartFile image) throws IOException {
         this.answerRepository.findById(id)
                 .ifPresentOrElse(a -> {
-                    a.setText(text);
-                    a.setPoints(points);
-                    a.setIsCorrect(isCorrect);
+                    a.setText(payload.text());
+                    a.setPoints(payload.points());
+                    a.setIsCorrect(payload.isCorrect());
+                    try {
+                        if(image != null) {
+                            a.setImage(ImageUtil.compressImage(image.getBytes()));
+                        } else {
+                            a.setImage(null);
+                        }
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }, () -> {
                     throw new NoSuchElementException();
                 });
@@ -51,7 +64,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public void delete(Long id) {
-        this.answerRepository.findById(id);
+        this.answerRepository.deleteById(id);
     }
 
     @Override

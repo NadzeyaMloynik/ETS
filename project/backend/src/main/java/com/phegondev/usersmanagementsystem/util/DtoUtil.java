@@ -27,6 +27,7 @@ public class DtoUtil {
         questionDto.setQuestion(question.getText());
         questionDto.setTestId(question.getTest().getId());
         questionDto.setAnswerList(toDtoAnswerList(question.getAnswers()));
+        questionDto.setImage(question.getImage());
         return questionDto;
     }
 
@@ -57,9 +58,8 @@ public class DtoUtil {
         notificationDto.setId(notification.getId());
         notificationDto.setTitle(notification.getTitle());
         notificationDto.setBody(notification.getBody());
-        notificationDto.setAuthorFirstname(notification.getAuthorFirstname());
-        notificationDto.setAuthorLastname(notification.getAuthorLastname());
         notificationDto.setIsRead(notification.getIsRead());
+        notificationDto.setDate(notification.getDate());
         return notificationDto;
     }
 
@@ -77,7 +77,7 @@ public class DtoUtil {
     public static TestDto toDtoTest(Test test) {
         TestDto testDto = new TestDto();
         testDto.setId(test.getId());
-        testDto.setName(testDto.getName());
+        testDto.setName(test.getName());
         testDto.setDescription(test.getDescription());
         testDto.setQuestions(toDtoQuestionList(test.getQuestions()));
         return testDto;
@@ -94,10 +94,13 @@ public class DtoUtil {
     }
 
     public static FeedbackDto toDtoFeedback(Feedback feedback) {
-        FeedbackDto feedbackDto = new FeedbackDto();
-        feedbackDto.setId(feedback.getId());
-        feedbackDto.setMessage(feedback.getMessage());
-        return feedbackDto;
+        if(feedback != null) {
+            FeedbackDto feedbackDto = new FeedbackDto();
+            feedbackDto.setId(feedback.getId());
+            feedbackDto.setMessage(feedback.getMessage());
+            return feedbackDto;
+        }
+        return null;
     }
 
     public static AssignmentDetailDto toDtoAssignmentDetail(AssignmentDetail assignmentDetail) {
@@ -107,6 +110,8 @@ public class DtoUtil {
         assigmentDetailDto.setFeedback(toDtoFeedback(assignmentDetail.getFeedback()));
         assigmentDetailDto.setTest(toDtoTest(assignmentDetail.getTest()));
         assigmentDetailDto.setResult(assignmentDetail.getResult());
+        assigmentDetailDto.setMaxResult(assignmentDetail.getMaxResult());
+        assigmentDetailDto.setTestAnswers(assignmentDetail.getTestAnswers());
         return assigmentDetailDto;
     }
 
@@ -127,7 +132,20 @@ public class DtoUtil {
         userDto.setCity(user.getCity());
         userDto.setPosition(user.getPosition());
         userDto.setLastname(user.getLastname());
+        userDto.setEmail(user.getEmail());
+        userDto.setRole(user.getRole());
+        userDto.setImage(user.getImageData());
         return userDto;
+    }
+
+    public static List<UserDto> toDtoUserList(List<Users> users) {
+        List<UserDto> userDtos = new ArrayList<>();
+        if(users != null) {
+            for(Users user : users) {
+                userDtos.add(toDtoUser(user));
+            }
+        }
+        return userDtos;
     }
 
     public static AssignmentDto toDtoAssignment(Assignment assignment) {
@@ -137,6 +155,8 @@ public class DtoUtil {
         assignmentDto.setToUser(toDtoUser(assignment.getToUser()));
         assignmentDto.setCloseDate(assignment.getCloseDate());
         assignmentDto.setStartDate(assignment.getStartDate());
+        assignmentDto.setIsOpen(assignment.getIsOpen());
+        assignmentDto.setName(assignment.getName());
         assignmentDto.setAssigmentDetails(toDtoAssignmentDetailList(assignment.getAssignmentDetailList()));
         return assignmentDto;
     }

@@ -43,14 +43,13 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void updateTest(Long id, String title, String description) {
-        this.testRepository.findById(id)
-                .ifPresentOrElse(t -> {
-                    t.setName(title);
-                    t.setDescription(description);
-                }, () -> {
-                    throw new NoSuchElementException();
-                });
+    public TestDto updateTest(Long id, String title, String description) {
+        Optional<Test> test = this.testRepository.findById(id);
+        if(test.isPresent()) {
+            test.get().setName(title);
+            test.get().setDescription(description);
+        }
+        return DtoUtil.toDtoTest(this.testRepository.save(test.get()));
     }
 
     @Override
@@ -61,7 +60,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public Page<TestDto> searchTests(int pageNo, String keyword) {
         List<Test> tests = testRepository.searchByNameOrDescription(keyword);
-        Pageable pageable = PageRequest.of(pageNo, 10);
+        Pageable pageable = PageRequest.of(pageNo, 6);
         return PageUtil.toPage(toDtoTestList(tests), pageable);
     }
 

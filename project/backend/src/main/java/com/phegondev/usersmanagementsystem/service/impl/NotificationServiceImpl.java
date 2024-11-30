@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,9 +34,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationDto create(Integer userId, NewNotificationPayload payload) {
+        LocalDate today = LocalDate.now();
         Optional<Users> user = usersRepo.findById(userId);
         if (user.isPresent()) {
-            Notification notification = notificationRepository.save(new Notification(null, payload.title(), payload.authorFirstname(), payload.authorLastname(), payload.body(), false, user.get()));
+            Notification notification = notificationRepository.save(new Notification(null, payload.title(), payload.body(), false, user.get(), today));
             return DtoUtil.toDtoNotification(notification);
         }
         else {

@@ -16,6 +16,8 @@ public class AssignmentDto {
     private Date closeDate;
     private UserDto toUser;
     private UserDto fromUser;
+    private Boolean isOpen;
+    private String name;
     private List<AssignmentDetailDto> assigmentDetails;
 }
 

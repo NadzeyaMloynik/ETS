@@ -1,0 +1,79 @@
+.main-update-container {
+  display: flex;
+  align-items: center;
+  min-height: 657px;
+  justify-content: space-around;
+}
+
+.image-container {
+  width: 400px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(207, 207, 207);
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+  height: 520px;
+  padding-bottom: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.image-container button {
+  position: relative;
+  margin-top: 10px;
+  width: 50%;
+}
+
+.main-update-container img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+  cursor: pointer;
+  box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+}
+
+.user-form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 600px;
+  border-radius: 20px;
+  padding: 40px;
+  background-color: rgb(237, 237, 237);
+  height: 550px;
+}
+
+.user-form-container input {
+  width: 350px;
+  padding: 10px;
+  border: none;
+  border-radius: 0%;
+  border-bottom: #a4a4a4 solid 1px;
+}
+
+.user-form-container input:focus {
+  background-color: #dddddd;
+  border-radius: 3px;
+  outline: none;
+}
+
+.image-container .name {
+  align-self: center;
+  width: 200px;
+}
+
+.image-container .name > button{
+width: 170px;
+margin-left: 30px;
+}
+
+
+.user-form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-form-container button{
+    margin-top: 20px;
+}

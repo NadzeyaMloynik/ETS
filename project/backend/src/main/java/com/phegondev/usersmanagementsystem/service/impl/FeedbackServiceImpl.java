@@ -9,11 +9,18 @@ import com.phegondev.usersmanagementsystem.repository.AssignmentRepository;
 import com.phegondev.usersmanagementsystem.repository.FeedbackRepository;
 import com.phegondev.usersmanagementsystem.service.FeedbackService;
 import com.phegondev.usersmanagementsystem.util.DtoUtil;
+import com.phegondev.usersmanagementsystem.util.PageUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static com.phegondev.usersmanagementsystem.util.DtoUtil.toDtoAssignmentDetailList;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +33,10 @@ public class FeedbackServiceImpl implements FeedbackService {
     public FeedbackDto create(Long assignmentDetailId, NewFeedbackPayload payload) {
         Optional <AssignmentDetail> assignmentDetail = this.assignmentDetailRepository.findById(assignmentDetailId);
         if (assignmentDetail.isPresent()) {
-            return DtoUtil.toDtoFeedback(this.feedbackRepository.save(new Feedback(null, payload.message(), assignmentDetail.get())));
+            Feedback feedback = this.feedbackRepository.save(new Feedback(null, payload.message(), assignmentDetail.get()));
+            assignmentDetail.get().setFeedback(feedback);
+            this.assignmentDetailRepository.save(assignmentDetail.get());
+            return DtoUtil.toDtoFeedback(feedback);
         } else {
             throw new NoSuchElementException();
         }
@@ -51,4 +61,11 @@ public class FeedbackServiceImpl implements FeedbackService {
         }
         throw new NoSuchElementException();
     }
+
+//    @Override
+//    public Page<FeedbackDto> getAllFeedback(int pageNo, int pageSize) {
+//        List<FeedbackDto> feedbacks = this.repository.findAllByAssignmentId(assigmentId);
+//        Pageable pageable = PageRequest.of(pageNo, 10);
+//        return PageUtil.toPage(toDtoAssignmentDetailList(feedbacks), pageable);
+//    }
 }

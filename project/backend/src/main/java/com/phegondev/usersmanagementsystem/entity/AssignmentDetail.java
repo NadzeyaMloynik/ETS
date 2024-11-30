@@ -17,18 +17,22 @@ public class AssignmentDetail {
     @Column(name = "assignment_detail_id")
     private Long id;
 
-    private Float result;
+    private Integer result;
+    private Integer maxResult;
     private Boolean isPassed;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "assignment_id", referencedColumnName = "assignment_id")
     private Assignment assignment;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "test_id", referencedColumnName = "test_id")
     private Test test;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "feedback_id", referencedColumnName = "feedback_id")
     private Feedback feedback;
+
+    @Column(columnDefinition = "JSON")
+    private String testAnswers;
 }

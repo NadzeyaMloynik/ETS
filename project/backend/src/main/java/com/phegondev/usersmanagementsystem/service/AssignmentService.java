@@ -20,7 +20,11 @@ public interface AssignmentService {
 
     List<AssignmentDto> findAllByToUser(Integer toUserId);
 
-    Page<AssignmentDto> paginationAssignmentFromUser(Integer fromUserId, int pageNo);
+    Page<AssignmentDto> paginationAssignmentFromUser(Integer fromUserId, int pageNo, int count);
 
-    Page<AssignmentDto> paginationAssignmentToUser(Integer toUserId, int pageNo);
+    Page<AssignmentDto> paginationAssignmentToUser(Integer toUserId, int pageNo, int count);
+
+    Page<AssignmentDto> findAllByStartDateBetween(Date startDate, Date endDate, int pageNo, Integer fromUserId);
+
+    Page<AssignmentDto> findAllSortedByIsOpen(int pageNo, Integer fromUserId);
 }

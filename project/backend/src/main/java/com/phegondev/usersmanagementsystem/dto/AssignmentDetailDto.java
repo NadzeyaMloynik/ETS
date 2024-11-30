@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AssignmentDetailDto {
     private Long id;
-    private Float result;
+    private Integer result;
     private Boolean isPassed;
     private TestDto test;
+    private Integer maxResult;
     private FeedbackDto feedback;
+    private String testAnswers;
 }

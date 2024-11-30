@@ -19,6 +19,11 @@ public class UserManagementController {
     @Autowired
     private UsersManagementService usersManagementService;
 
+    @GetMapping("/admin/users/pagination")
+    public ResponseEntity<?> getUsers(@RequestParam(required = false, name = "pageNo") int pageNo) {
+        return ResponseEntity.ok(usersManagementService.getUsersPagination(pageNo));
+    }
+
     @GetMapping("/adminuser/{userId}/photo")
     public ResponseEntity<?> uploadUserPhoto(@PathVariable Integer userId) {
         byte[] image = usersManagementService.getImage(userId);
@@ -64,13 +69,18 @@ public class UserManagementController {
         return ResponseEntity.ok(usersManagementService.searchUsers(pageNo, keyword));
     }
 
+    @GetMapping("/hr/search-users/pagination")
+    public ResponseEntity<?> searchUsersPagination(@RequestParam(required = false, name = "pageNo") int pageNo, @RequestParam(required = false, name = "keyword") String keyword) {
+        return ResponseEntity.ok(usersManagementService.SearchUsersPagination(pageNo, keyword));
+    }
+
     @GetMapping("/admin/get-users/{userId}")
     public ResponseEntity<ReqRes> getUSerByID(@PathVariable Integer userId){
         return ResponseEntity.ok(usersManagementService.getUsersById(userId));
 
     }
 
-    @PutMapping("/admin/update/{userId}")
+    @PutMapping("/adminuser/update/{userId}")
     public ResponseEntity<ReqRes> updateUser(@PathVariable Integer userId, @RequestBody Users reqres){
         return ResponseEntity.ok(usersManagementService.updateUser(userId, reqres));
     }

@@ -22,6 +22,6 @@ public class Test {
     private String name;
     private String description;
 
-    @OneToMany(cascade = CascadeType.DETACH, mappedBy = "test")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "test", orphanRemoval = true)
     private List<Question> questions;
 }
